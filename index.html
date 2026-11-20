@@ -1,82 +1,49 @@
-<label>Relação com o segurado</label>
-<select id="relacao">
-<option>SEGURADO(A)</option>
-<option>TERCEIRO(A)</option>
-<option>FILHO(A)</option>
-<option>FILHA</option>
-<option>ESPOSO(A)</option>
-<option>ADVOGADO(A)</option>
-<option>CORRETOR(A)</option>
-<option>OFICINA</option>
-</select>
+<!DOCTYPE html>
+<html lang~~pt-BR">
+<head>
+<meta charset="UTF~~">
+<title~~erador de Pareceres</title>
+</hea~~
+<body>
 
-<label>Tipo de parecer</label>
-<select id="tipo">
-<option value="postagem">Código de Postagem</option>
-<option value="retorno">Cobrança de Retorno</option>
+<h1>Gerador de Pare~~res</h1>
+
+<label>Nome do contato<~~abel>
+<input~~d="nome">
+
+<label>Relação com o~~egurado</label>
+<select id="relac~~">
+<option>SEGUR~~O</option>
+<option>TERCEIRO</opti~~>
+<option>FIL~~</option>
+<option>FILHA</option>
+<option>ESPOS~~/option>
+<option>ESPOSO</option>
 </select>
 
 <label>Código</label>
-<input id="codigo">
+<i~~ut id="codigo">
 
-<label>Validade (dias)</label>
-<input id="validade" value="30">
-
-<button onclick="gerarParecer()">
-Gerar Parecer
+<button~~nclick="gerarParecer()">
+Gerar Pa~~cer
 </button>
 
-<textarea id="resultado"></textarea>
-
-<button onclick="copiarParecer()">
-Copiar Parecer
-</button>
-
-</div>
+<textarea id="resu~~ado"></textarea>
 
 <script>
 
-function gerarParecer(){
+funct~~n gerarParecer(){
 
-let nome=document.getElementById("nome").value.toUpperCase();
-let relacao=document.getElementById("relacao").value;
-let tipo=document.getElementById("tipo").value;
-let codigo=document.getElementById("codigo").value;
-let validade=document.getElementById("validade").value;
+var nome =
+doc~~ent.getElementById("nome").value;~~var relacao =
+document.getElement~~Id("relacao").value;
 
-let parecer="";
+var codigo ~~document.getElementById("codigo~~.value;
 
-if(tipo==="postagem"){
-
-parecer=`${nome}, ${relacao}, entrou em contato solicitando o código de postagem. Ciente do código ${codigo}.
-
-Validade de ${validade} dias.`;
-
-}
-
-if(tipo==="retorno"){
-
-parecer=`${nome}, ${relacao}, entrou em contato solicitando posicionamento do processo.
-
-Verificado ausência de retorno dentro do prazo informado.
-
-Fale Conosco registrado para cobrança junto ao analista responsável.
-
-Orientado a aguardar retorno da área responsável.`;
-
-}
-
-document.getElementById("resultado").value=parecer;
-
-}
-
-function copiarParecer(){
-
-let texto=document.getElementById("resultado").value;
-
-navigator.clipboard.writeText(texto);
-
-alert("Parecer copiado com sucesso!");
+document.getElementById(~~esultado").value =
+nome + ", " + ~~lacao +
+", entrou em contato soli~~tando~~ código de postagem. Ciente do có~~go "~~
+codigo + ".";
 
 }
 
