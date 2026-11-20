@@ -1,53 +1,27 @@
 <!DOCTYPE html>
-<html lang~~pt-BR">
-<head>
-<meta charset="UTF~~">
-<title~~erador de Pareceres</title>
-</hea~~
+<html>
 <body>
 
-<h1>Gerador de Pare~~res</h1>
+<h1>Teste</h1>
 
-<label>Nome do contato<~~abel>
-<input~~d="nome">
+<input id="nome" placeholder="Nome">
 
-<label>Relação com o~~egurado</label>
-<select id="relac~~">
-<option>SEGUR~~O</option>
-<option>TERCEIRO</opti~~>
-<option>FIL~~</option>
-<option>FILHA</option>
-<option>ESPOS~~/option>
-<option>ESPOSO</option>
-</select>
-
-<label>Código</label>
-<i~~ut id="codigo">
-
-<button~~nclick="gerarParecer()">
-Gerar Pa~~cer
+<button onclick="testar()">
+Gerar
 </button>
 
-<textarea id="resu~~ado"></textarea>
+<p id="resultado"></p>
 
 <script>
 
-funct~~n gerarParecer(){
+function testar() {
 
 var nome =
-doc~~ent.getElementById("nome").value;~~var relacao =
-document.getElement~~Id("relacao").value;
+document.getElementById("nome").value;
 
-var codigo ~~document.getElementById("codigo~~.value;
-
-document.getElementById(~~esultado").value =
-nome + ", " + ~~lacao +
-", entrou em contato soli~~tando~~ código de postagem. Ciente do có~~go "~~
-codigo + ".";
+document.getElementById("resultado").innerHTML =
+"Olá " + nome;
 
 }
 
 </script>
-
-</body>
-</html>
