@@ -1,1 +1,86 @@
+<label>Relação com o segurado</label>
+<select id="relacao">
+<option>SEGURADO(A)</option>
+<option>TERCEIRO(A)</option>
+<option>FILHO(A)</option>
+<option>FILHA</option>
+<option>ESPOSO(A)</option>
+<option>ADVOGADO(A)</option>
+<option>CORRETOR(A)</option>
+<option>OFICINA</option>
+</select>
 
+<label>Tipo de parecer</label>
+<select id="tipo">
+<option value="postagem">Código de Postagem</option>
+<option value="retorno">Cobrança de Retorno</option>
+</select>
+
+<label>Código</label>
+<input id="codigo">
+
+<label>Validade (dias)</label>
+<input id="validade" value="30">
+
+<button onclick="gerarParecer()">
+Gerar Parecer
+</button>
+
+<textarea id="resultado"></textarea>
+
+<button onclick="copiarParecer()">
+Copiar Parecer
+</button>
+
+</div>
+
+<script>
+
+function gerarParecer(){
+
+let nome=document.getElementById("nome").value.toUpperCase();
+let relacao=document.getElementById("relacao").value;
+let tipo=document.getElementById("tipo").value;
+let codigo=document.getElementById("codigo").value;
+let validade=document.getElementById("validade").value;
+
+let parecer="";
+
+if(tipo==="postagem"){
+
+parecer=`${nome}, ${relacao}, entrou em contato solicitando o código de postagem. Ciente do código ${codigo}.
+
+Validade de ${validade} dias.`;
+
+}
+
+if(tipo==="retorno"){
+
+parecer=`${nome}, ${relacao}, entrou em contato solicitando posicionamento do processo.
+
+Verificado ausência de retorno dentro do prazo informado.
+
+Fale Conosco registrado para cobrança junto ao analista responsável.
+
+Orientado a aguardar retorno da área responsável.`;
+
+}
+
+document.getElementById("resultado").value=parecer;
+
+}
+
+function copiarParecer(){
+
+let texto=document.getElementById("resultado").value;
+
+navigator.clipboard.writeText(texto);
+
+alert("Parecer copiado com sucesso!");
+
+}
+
+</script>
+
+</body>
+</html>
