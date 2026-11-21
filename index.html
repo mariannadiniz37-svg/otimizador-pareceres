@@ -9,17 +9,17 @@
 body{
 font-family:Arial,sans-serif;
 background:#f4f6f9;
-margin:0;
 padding:20px;
+margin:0;
 }
 
 .container{
 max-width:1000px;
 margin:auto;
-background:#fff;
+background:#ffffff;
 padding:20px;
 border-radius:12px;
-box-shadow:0 0 10px rgba(0,0,0,0.10);
+box-shadow:0 0 10px rgba(0,0,0,.1);
 }
 
 h1{
@@ -28,8 +28,8 @@ text-align:center;
 
 label{
 display:block;
-font-weight:bold;
 margin-top:12px;
+font-weight:bold;
 }
 
 input,select,textarea{
@@ -46,7 +46,7 @@ width:100%;
 padding:12px;
 margin-top:15px;
 background:#2563eb;
-color:white;
+color:#fff;
 border:none;
 border-radius:6px;
 cursor:pointer;
@@ -86,28 +86,14 @@ display:none;
 
 <label>Categoria</label>
 <select id="categoria" onchange="atualizarTipos()">
-
 <option value="">Selecione</option>
-
-<option value="informacoes">
-Informações
-</option>
-
-<option value="sinistro">
-Sinistro
-</option>
-
-<option value="vistoria">
-Vistoria
-</option>
-
+<option value="informacoes">Informações</option>
+<option value="sinistro">Sinistro</option>
+<option value="vistoria">Vistoria</option>
 </select>
 
 <label>Tipo de Parecer</label>
-
-<select id="tipo" onchange="mostrarCampos()">
-
-</select>
+<select id="tipo" onchange="mostrarCampos()"></select>
 
 <div id="campoCodigo" class="oculto">
 
@@ -167,19 +153,9 @@ tipo.innerHTML="";
 if(categoria=="informacoes"){
 
 tipo.innerHTML=`
-
-<option value="postagem">
-Código de Postagem
-</option>
-
-<option value="envio">
-Envio de Documentos
-</option>
-
-<option value="cnpj">
-CNPJ Inapto para Faturamento
-</option>
-
+<option value="postagem">Código de Postagem</option>
+<option value="envio">Envio de Documentos</option>
+<option value="cnpj">CNPJ Inapto para Faturamento</option>
 `;
 
 }
@@ -187,11 +163,7 @@ CNPJ Inapto para Faturamento
 if(categoria=="sinistro"){
 
 tipo.innerHTML=`
-
-<option value="constatacao">
-Constatação de Danos
-</option>
-
+<option value="constatacao">Constatação de Danos</option>
 `;
 
 }
@@ -199,11 +171,7 @@ Constatação de Danos
 if(categoria=="vistoria"){
 
 tipo.innerHTML=`
-
-<option value="vistoria_complementar">
-Vistoria Complementar
-</option>
-
+<option value="vistoria_complementar">Vistoria Complementar</option>
 `;
 
 }
@@ -214,11 +182,11 @@ mostrarCampos();
 
 function mostrarCampos(){
 
-let tipo =
-document.getElementById("tipo").value;
-
 document.getElementById("campoCodigo").style.display="none";
 document.getElementById("camposVistoria").style.display="none";
+
+let tipo =
+document.getElementById("tipo").value;
 
 if(tipo=="postagem"){
 
@@ -227,119 +195,6 @@ document.getElementById("campoCodigo").style.display="block";
 }
 
 if(tipo=="vistoria_complementar"){
-
-let cliente =
-document.getElementById("clienteVistoria").value;
-
-let rede =
-document.getElementById("redeVistoria").value;
-
-let veiculo =
-document.getElementById("veiculoVistoria").value;
-
-let agora = new Date();
-
-let diasInicio = 1;
-
-if(agora.getHours() >= 17){
-
-diasInicio = 2;
-
-}
-
-let diasVistoria = 1;
-let diasAnalise = 2;
-
-if(
-cliente=="SEGURADO" &&
-rede=="REFERENCIADA"
-){
-
-diasVistoria = 1;
-diasAnalise = 2;
-
-}
-
-else if(
-cliente=="SEGURADO" &&
-rede=="LIVRE ESCOLHA"
-){
-
-diasVistoria = 2;
-diasAnalise = 3;
-
-}
-
-else if(
-cliente=="TERCEIRO" &&
-rede=="REFERENCIADA"
-){
-
-diasVistoria = 2;
-diasAnalise = 3;
-
-}
-
-else if(
-(cliente=="TERCEIRO" && rede=="LIVRE ESCOLHA" && veiculo=="CARRO")
-){
-
-diasVistoria = 3;
-diasAnalise = 7;
-
-}
-
-if(
-veiculo=="MOTO" ||
-veiculo=="CAMINHÃO" ||
-veiculo=="ELÉTRICO"
-){
-
-diasVistoria = 2;
-diasAnalise = 3;
-
-}
-
-let inicio =
-adicionarDiasUteis(
-agora,
-diasInicio
-);
-
-let termino =
-adicionarDiasUteis(
-inicio,
-diasVistoria - 1
-);
-
-let analise =
-adicionarDiasUteis(
-termino,
-diasAnalise
-);
-
-parecer =
-
-nome + ", " +
-relacao +
-", entrou em contato solicitando vistoria complementar. Ciente do prazo de vistoria.\n\n" +
-
-"Data de início da vistoria: " +
-formatarData(inicio) +
-
-".\n\n" +
-
-"Data de término da vistoria: " +
-formatarData(termino) +
-
-".\n\n" +
-
-"Data final de análise: " +
-formatarData(analise) +
-
-".";
-
-}
 
 document.getElementById("camposVistoria").style.display="block";
 
@@ -351,7 +206,7 @@ function adicionarDiasUteis(data,dias){
 
 let resultado = new Date(data);
 
-while(dias>0){
+while(dias > 0){
 
 resultado.setDate(resultado.getDate()+1);
 
@@ -359,9 +214,7 @@ if(
 resultado.getDay()!=0 &&
 resultado.getDay()!=6
 ){
-
 dias--;
-
 }
 
 }
@@ -426,20 +279,18 @@ let parecer="";
 
 if(tipo=="postagem"){
 
-parecer =
-nome + ", " +
-relacao +
+parecer=
+nome + ", " + relacao +
 ", entrou em contato solicitando o código de postagem. Ciente do código " +
 codigo +
 ".\n\nValidade de 30 dias.";
 
 }
 
-if(tipo=="envio"){
+else if(tipo=="envio"){
 
-parecer =
-nome + ", " +
-relacao +
+parecer=
+nome + ", " + relacao +
 ", entrou em contato para questionar para qual e-mail deve encaminhar os documentos solicitados.\n\n" +
 
 "Ciente do e-mail aviso@alfaseg.com.br.\n\n" +
@@ -448,11 +299,10 @@ relacao +
 
 }
 
-if(tipo=="cnpj"){
+else if(tipo=="cnpj"){
 
-parecer =
-nome + ", " +
-relacao +
+parecer=
+nome + ", " + relacao +
 ", entrou em contato informando que o CNPJ está inapto para faturamento.\n\n" +
 
 "ALFA SEGURADORA S.A.\n" +
@@ -466,16 +316,15 @@ relacao +
 
 }
 
-if(tipo=="constatacao"){
+else if(tipo=="constatacao"){
 
-parecer =
-nome + ", " +
-relacao +
+parecer=
+nome + ", " + relacao +
 ", entrou em contato para formalizar o sinistro. Ciente do número do protocolo e que deverá encaminhar por e-mail os documentos de praxe e fotos de constatação dos danos (dianteira, traseira, lado esquerdo e lado direito) e retornar contato para confirmar recepção.";
 
 }
 
-if(tipo=="vistoria_complementar"){
+else if(tipo=="vistoria_complementar"){
 
 let cliente =
 document.getElementById("clienteVistoria").value;
@@ -499,33 +348,31 @@ diasInicio = 2;
 let diasVistoria = 1;
 let diasAnalise = 2;
 
-if(
-cliente=="SEGURADO" &&
-rede=="REFERENCIADA"
-){
+if(cliente=="SEGURADO" && rede=="REFERENCIADA"){
 
 diasVistoria = 1;
 diasAnalise = 2;
 
 }
 
-if(
-cliente=="SEGURADO" &&
-rede=="LIVRE ESCOLHA"
-){
+else if(cliente=="SEGURADO" && rede=="LIVRE ESCOLHA"){
 
 diasVistoria = 2;
 diasAnalise = 3;
 
 }
 
-if(
-cliente=="TERCEIRO" &&
-rede=="REFERENCIADA"
-){
+else if(cliente=="TERCEIRO" && rede=="REFERENCIADA"){
 
 diasVistoria = 2;
 diasAnalise = 3;
+
+}
+
+else if(cliente=="TERCEIRO" && rede=="LIVRE ESCOLHA" && veiculo=="CARRO"){
+
+diasVistoria = 3;
+diasAnalise = 7;
 
 }
 
@@ -537,17 +384,6 @@ veiculo=="ELÉTRICO"
 
 diasVistoria = 2;
 diasAnalise = 3;
-
-}
-
-if(
-cliente=="TERCEIRO" &&
-rede=="LIVRE ESCOLHA" &&
-veiculo=="CARRO"
-){
-
-diasVistoria = 3;
-diasAnalise = 7;
 
 }
 
@@ -571,7 +407,9 @@ diasAnalise
 
 parecer =
 
-"Entrou em contato solicitando vistoria complementar. Ciente do prazo de vistoria.\n\n" +
+nome + ", " +
+relacao +
+", entrou em contato solicitando vistoria complementar. Ciente do prazo de vistoria.\n\n" +
 
 "Data de início da vistoria: " +
 formatarData(inicio) +
