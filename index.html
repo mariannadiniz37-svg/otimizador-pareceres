@@ -9,25 +9,27 @@
 body{
 font-family:Arial,sans-serif;
 background:#f4f6f9;
+margin:0;
 padding:20px;
-max-width:900px;
-margin:auto;
 }
 
 .container{
-background:white;
+max-width:1000px;
+margin:auto;
+background:#fff;
 padding:20px;
-border-radius:10px;
+border-radius:12px;
 box-shadow:0 0 10px rgba(0,0,0,0.1);
 }
 
 h1{
 text-align:center;
+color:#1f2937;
 }
 
 label{
 display:block;
-margin-top:10px;
+margin-top:12px;
 font-weight:bold;
 }
 
@@ -35,6 +37,8 @@ input,select,textarea{
 width:100%;
 padding:10px;
 margin-top:5px;
+border:1px solid #ccc;
+border-radius:6px;
 box-sizing:border-box;
 }
 
@@ -45,49 +49,68 @@ margin-top:15px;
 background:#2563eb;
 color:white;
 border:none;
+border-radius:6px;
 cursor:pointer;
-border-radius:5px;
+font-size:16px;
+}
+
+button:hover{
+background:#1d4ed8;
 }
 
 textarea{
-height:200px;
-margin-top:10px;
+height:220px;
+}
+
+.oculto{
+display:none;
 }
 </style>
+
 </head>
 
 <body>
 
 <div class="container">
 
-<h1>Gerador de Pareceres</h1>
+<h1>Otimizador de Pareceres</h1>
 
 <label>Nome do contato</label>
 <input type="text" id="nome">
 
 <label>Relação com o segurado</label>
 <select id="relacao">
-<option>SEGURADO(A)</option>
-<option>TERCEIRO(A)</option>
-<option>FILHO(A)</option>
+<option>SEGURADO</option>
+<option>TERCEIRO</option>
+<option>FILHO</option>
 <option>FILHA</option>
-<option>ESPOSO(A)</option>
-<option>ADVOGADO(A)</option>
-<option>CORRETOR(A)</option>
+<option>ESPOSA</option>
+<option>ESPOSO</option>
+<option>ADVOGADO</option>
+<option>CORRETOR</option>
 <option>OFICINA</option>
 </select>
 
-<label>Tipo de parecer</label>
-<select id="tipo">
-<option value="postagem">Código de Postagem</option>
-<option value="retorno">Cobrança de Retorno</option>
+<label>Categoria</label>
+<select id="categoria" onchange="atualizarTipos()">
+<option value="">Selecione</option>
+<option value="informacoes">Informações</option>
+<option value="sinistro">Sinistro</option>
+<option value="vistoria">Vistoria</option>
 </select>
 
-<label>Código</label>
+<label>Tipo de Parecer</label>
+<select id="tipo"></select>
+
+<div id="camposPostagem" class="oculto">
+
+<label>Código de Postagem</label>
 <input type="text" id="codigo">
 
 <label>Validade (dias)</label>
 <input type="number" id="validade" value="30">
+
+</div>
 
 <button onclick="gerarParecer()">
 Gerar Parecer
@@ -103,13 +126,64 @@ Copiar Parecer
 
 <script>
 
+function atualizarTipos(){
+
+var categoria =
+document.getElementById("categoria").value;
+
+var tipo =
+document.getElementById("tipo");
+
+tipo.innerHTML = "";
+
+document.getElementById("camposPostagem").style.display = "none";
+
+if(categoria=="informacoes"){
+
+tipo.innerHTML = `
+<option value="postagem">Código de Postagem</option>
+<option value="cnpj">CNPJ Inapto para Faturamento</option>
+`;
+
+document.getElementById("camposPostagem").style.display = "block";
+
+}
+
+if(categoria=="sinistro"){
+
+tipo.innerHTML = `
+<option value="abertura">Abertura de Sinistro</option>
+<option value="constatacao">Constatação de Danos</option>
+`;
+
+}
+
+if(categoria=="vistoria"){
+
+tipo.innerHTML = `
+<option value="info_vistoria">Informação de Vistoria</option>
+`;
+
+}
+
+}
+
 function gerarParecer(){
 
-var nome = document.getElementById("nome").value.toUpperCase();
-var relacao = document.getElementById("relacao").value;
-var tipo = document.getElementById("tipo").value;
-var codigo = document.getElementById("codigo").value;
-var validade = document.getElementById("validade").value;
+var nome =
+document.getElementById("nome").value.toUpperCase();
+
+var relacao =
+document.getElementById("relacao").value;
+
+var tipo =
+document.getElementById("tipo").value;
+
+var codigo =
+document.getElementById("codigo").value;
+
+var validade =
+document.getElementById("validade").value;
 
 var parecer = "";
 
@@ -125,11 +199,44 @@ validade +
 
 }
 
-if(tipo=="retorno"){
+if(tipo=="cnpj"){
 
 parecer =
 nome + ", " + relacao +
-", entrou em contato solicitando posicionamento do processo.\n\nVerificado ausência de retorno dentro do prazo informado.\n\nFale Conosco registrado para cobrança junto ao analista responsável.\n\nOrientado a aguardar retorno da área responsável.";
+", entrou em contato informando que o CNPJ está inapto para faturamento.\n\n" +
+
+"ALFA SEGURADORA S.A.\n" +
+"CNPJ: 02.713.529/0001-88\n" +
+"Inscrição Municipal: 2.735.513-6\n" +
+"Inscrição Estadual: 115.550.340.117\n" +
+"Av. Paulista, 2150\n" +
+"São Paulo/SP\n" +
+"CEP: 01310-300\n" +
+"Status: Ativa.";
+
+}
+
+if(tipo=="abertura"){
+
+parecer =
+nome + ", " + relacao +
+", entrou em contato para abertura de sinistro. Ciente do número do protocolo e orientado quanto ao envio da documentação necessária para análise.";
+
+}
+
+if(tipo=="constatacao"){
+
+parecer =
+nome + ", " + relacao +
+", entrou em contato para formalizar o sinistro. Ciente do número do protocolo e que deverá encaminhar por e-mail os documentos de praxe e fotos de constatação dos danos (dianteira, traseira, lado esquerdo e lado direito) e retornar contato para confirmar recepção.";
+
+}
+
+if(tipo=="info_vistoria"){
+
+parecer =
+nome + ", " + relacao +
+", entrou em contato solicitando informações sobre vistoria. Orientado quanto aos procedimentos e prazo de análise da vistoria.";
 
 }
 
@@ -139,7 +246,8 @@ document.getElementById("resultado").value = parecer;
 
 function copiarParecer(){
 
-var texto = document.getElementById("resultado");
+var texto =
+document.getElementById("resultado");
 
 texto.select();
 
@@ -153,3 +261,4 @@ alert("Parecer copiado com sucesso!");
 
 </body>
 </html>
+
