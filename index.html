@@ -6,17 +6,18 @@
 <title>Otimizador de Pareceres</title>
 
 <style>
+
 body{
 font-family:Arial,sans-serif;
 background:#f4f6f9;
-margin:0;
 padding:20px;
+margin:0;
 }
 
 .container{
 max-width:1000px;
 margin:auto;
-background:#fff;
+background:white;
 padding:20px;
 border-radius:12px;
 box-shadow:0 0 10px rgba(0,0,0,0.1);
@@ -24,13 +25,12 @@ box-shadow:0 0 10px rgba(0,0,0,0.1);
 
 h1{
 text-align:center;
-color:#1f2937;
 }
 
 label{
 display:block;
-margin-top:12px;
 font-weight:bold;
+margin-top:12px;
 }
 
 input,select,textarea{
@@ -51,7 +51,6 @@ color:white;
 border:none;
 border-radius:6px;
 cursor:pointer;
-font-size:16px;
 }
 
 button:hover{
@@ -59,12 +58,13 @@ background:#1d4ed8;
 }
 
 textarea{
-height:220px;
+height:260px;
 }
 
 .oculto{
 display:none;
 }
+
 </style>
 
 </head>
@@ -82,12 +82,11 @@ display:none;
 <select id="relacao">
 <option>SEGURADO</option>
 <option>TERCEIRO</option>
-<option>FILHO</option>
-<option>FILHA</option>
-<option>ESPOSA</option>
-<option>ESPOSO</option>
+<option>FILHO(A)</option>
+<option>ESPOSA(O)</option>
 <option>ADVOGADO</option>
 <option>CORRETOR</option>
+<option>PREPOSTO</option>
 <option>OFICINA</option>
 </select>
 
@@ -100,15 +99,13 @@ display:none;
 </select>
 
 <label>Tipo de Parecer</label>
-<select id="tipo"></select>
+<select id="tipo" onchange="mostrarCampos()">
+</select>
 
-<div id="camposPostagem" class="oculto">
+<div id="campoCodigo" class="oculto">
 
 <label>Código de Postagem</label>
 <input type="text" id="codigo">
-
-<label>Validade (dias)</label>
-<input type="number" id="validade" value="30">
 
 </div>
 
@@ -128,31 +125,27 @@ Copiar Parecer
 
 function atualizarTipos(){
 
-var categoria =
+let categoria =
 document.getElementById("categoria").value;
 
-var tipo =
+let tipo =
 document.getElementById("tipo");
 
-tipo.innerHTML = "";
-
-document.getElementById("camposPostagem").style.display = "none";
+tipo.innerHTML="";
 
 if(categoria=="informacoes"){
 
 tipo.innerHTML = `
 <option value="postagem">Código de Postagem</option>
+<option value="envio">Envio de Documentos</option>
 <option value="cnpj">CNPJ Inapto para Faturamento</option>
 `;
-
-document.getElementById("camposPostagem").style.display = "block";
 
 }
 
 if(categoria=="sinistro"){
 
 tipo.innerHTML = `
-<option value="abertura">Abertura de Sinistro</option>
 <option value="constatacao">Constatação de Danos</option>
 `;
 
@@ -161,92 +154,224 @@ tipo.innerHTML = `
 if(categoria=="vistoria"){
 
 tipo.innerHTML = `
-<option value="info_vistoria">Informação de Vistoria</option>
+<option value="vistoria_complementar">Vistoria Complementar</option>
 `;
 
 }
+
+mostrarCampos();
+
+}
+
+function mostrarCampos(){
+
+let tipo =
+document.getElementById("tipo").value;
+
+document.getElementById("campoCodigo").style.display="none";
+
+if(tipo=="postagem"){
+
+document.getElementById("campoCodigo").style.display="block";
+
+}
+
+}
+
+function adicionarDiasUteis(data,dias){
+
+let resultado = new Date(data);
+
+while(dias>0){
+
+resultado.setDate(resultado.getDate()+1);
+
+if(
+resultado.getDay()!=0 &&
+resultado.getDay()!=6
+){
+
+dias--;
+
+}
+
+}
+
+return resultado;
+
+}
+
+function formatarData(data){
+
+const meses=[
+"janeiro",
+"fevereiro",
+"março",
+"abril",
+"maio",
+"junho",
+"julho",
+"agosto",
+"setembro",
+"outubro",
+"novembro",
+"dezembro"
+];
+
+const semana=[
+"domingo",
+"segunda-feira",
+"terça-feira",
+"quarta-feira",
+"quinta-feira",
+"sexta-feira",
+"sábado"
+];
+
+return data.getDate()
++ " de "
++ meses[data.getMonth()]
++ " de "
++ data.getFullYear()
++ " ("
++ semana[data.getDay()]
++ ")";
 
 }
 
 function gerarParecer(){
 
-var nome =
+let nome =
 document.getElementById("nome").value.toUpperCase();
 
-var relacao =
+let relacao =
 document.getElementById("relacao").value;
 
-var tipo =
+let tipo =
 document.getElementById("tipo").value;
 
-var codigo =
+let codigo =
 document.getElementById("codigo").value;
 
-var validade =
-document.getElementById("validade").value;
-
-var parecer = "";
+let parecer = "";
 
 if(tipo=="postagem"){
 
 parecer =
-nome + ", " + relacao +
+nome + ", " +
+relacao +
 ", entrou em contato solicitando o código de postagem. Ciente do código " +
 codigo +
-".\n\nValidade de " +
-validade +
-" dias.";
+".\n\nValidade de 30 dias.";
+
+}
+
+if(tipo=="envio"){
+
+parecer =
+nome + ", " +
+relacao +
+", entrou em contato para questionar para qual e-mail deve encaminhar os documentos solicitados.\n\n" +
+
+"Ciente do e-mail aviso@alfaseg.com.br.\n\n" +
+
+"Orientado a inserir o número do sinistro no assunto e retornar após 15 minutos para confirmar recepção e anexo.";
 
 }
 
 if(tipo=="cnpj"){
 
 parecer =
-nome + ", " + relacao +
+nome + ", " +
+relacao +
 ", entrou em contato informando que o CNPJ está inapto para faturamento.\n\n" +
 
 "ALFA SEGURADORA S.A.\n" +
+
 "CNPJ: 02.713.529/0001-88\n" +
+
 "Inscrição Municipal: 2.735.513-6\n" +
+
 "Inscrição Estadual: 115.550.340.117\n" +
+
 "Av. Paulista, 2150\n" +
+
 "São Paulo/SP\n" +
+
 "CEP: 01310-300\n" +
+
 "Status: Ativa.";
-
-}
-
-if(tipo=="abertura"){
-
-parecer =
-nome + ", " + relacao +
-", entrou em contato para abertura de sinistro. Ciente do número do protocolo e orientado quanto ao envio da documentação necessária para análise.";
 
 }
 
 if(tipo=="constatacao"){
 
 parecer =
-nome + ", " + relacao +
+nome + ", " +
+relacao +
 ", entrou em contato para formalizar o sinistro. Ciente do número do protocolo e que deverá encaminhar por e-mail os documentos de praxe e fotos de constatação dos danos (dianteira, traseira, lado esquerdo e lado direito) e retornar contato para confirmar recepção.";
 
 }
 
-if(tipo=="info_vistoria"){
+if(tipo=="vistoria_complementar"){
 
-parecer =
-nome + ", " + relacao +
-", entrou em contato solicitando informações sobre vistoria. Orientado quanto aos procedimentos e prazo de análise da vistoria.";
+let agora = new Date();
+
+let diasInicio = 1;
+
+if(agora.getHours() >= 17){
+
+diasInicio = 2;
 
 }
 
-document.getElementById("resultado").value = parecer;
+let inicio =
+adicionarDiasUteis(
+agora,
+diasInicio
+);
+
+let termino =
+new Date(inicio);
+
+let analise =
+adicionarDiasUteis(
+termino,
+2
+);
+
+parecer =
+
+"Entrou em contato solicitando vistoria complementar. Ciente do prazo de vistoria.\n\n" +
+
+"Data de início da vistoria: " +
+
+formatarData(inicio) +
+
+".\n\n" +
+
+"Data de término da vistoria: " +
+
+formatarData(termino) +
+
+".\n\n" +
+
+"Data final de análise: " +
+
+formatarData(analise) +
+
+".";
+
+}
+
+document.getElementById("resultado").value =
+parecer;
 
 }
 
 function copiarParecer(){
 
-var texto =
+let texto =
 document.getElementById("resultado");
 
 texto.select();
@@ -261,4 +386,3 @@ alert("Parecer copiado com sucesso!");
 
 </body>
 </html>
-
