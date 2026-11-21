@@ -6,21 +6,20 @@
 <title>Otimizador de Pareceres</title>
 
 <style>
-
 body{
 font-family:Arial,sans-serif;
 background:#f4f6f9;
-padding:20px;
 margin:0;
+padding:20px;
 }
 
 .container{
 max-width:1000px;
 margin:auto;
-background:white;
+background:#fff;
 padding:20px;
 border-radius:12px;
-box-shadow:0 0 10px rgba(0,0,0,0.1);
+box-shadow:0 0 10px rgba(0,0,0,0.10);
 }
 
 h1{
@@ -53,18 +52,13 @@ border-radius:6px;
 cursor:pointer;
 }
 
-button:hover{
-background:#1d4ed8;
-}
-
 textarea{
-height:260px;
+height:300px;
 }
 
 .oculto{
 display:none;
 }
-
 </style>
 
 </head>
@@ -92,20 +86,57 @@ display:none;
 
 <label>Categoria</label>
 <select id="categoria" onchange="atualizarTipos()">
+
 <option value="">Selecione</option>
-<option value="informacoes">Informações</option>
-<option value="sinistro">Sinistro</option>
-<option value="vistoria">Vistoria</option>
+
+<option value="informacoes">
+Informações
+</option>
+
+<option value="sinistro">
+Sinistro
+</option>
+
+<option value="vistoria">
+Vistoria
+</option>
+
 </select>
 
 <label>Tipo de Parecer</label>
+
 <select id="tipo" onchange="mostrarCampos()">
+
 </select>
 
 <div id="campoCodigo" class="oculto">
 
 <label>Código de Postagem</label>
 <input type="text" id="codigo">
+
+</div>
+
+<div id="camposVistoria" class="oculto">
+
+<label>Cliente</label>
+<select id="clienteVistoria">
+<option>SEGURADO</option>
+<option>TERCEIRO</option>
+</select>
+
+<label>Rede</label>
+<select id="redeVistoria">
+<option>REFERENCIADA</option>
+<option>LIVRE ESCOLHA</option>
+</select>
+
+<label>Tipo de Veículo</label>
+<select id="veiculoVistoria">
+<option>CARRO</option>
+<option>MOTO</option>
+<option>CAMINHÃO</option>
+<option>ELÉTRICO</option>
+</select>
 
 </div>
 
@@ -135,26 +166,44 @@ tipo.innerHTML="";
 
 if(categoria=="informacoes"){
 
-tipo.innerHTML = `
-<option value="postagem">Código de Postagem</option>
-<option value="envio">Envio de Documentos</option>
-<option value="cnpj">CNPJ Inapto para Faturamento</option>
+tipo.innerHTML=`
+
+<option value="postagem">
+Código de Postagem
+</option>
+
+<option value="envio">
+Envio de Documentos
+</option>
+
+<option value="cnpj">
+CNPJ Inapto para Faturamento
+</option>
+
 `;
 
 }
 
 if(categoria=="sinistro"){
 
-tipo.innerHTML = `
-<option value="constatacao">Constatação de Danos</option>
+tipo.innerHTML=`
+
+<option value="constatacao">
+Constatação de Danos
+</option>
+
 `;
 
 }
 
 if(categoria=="vistoria"){
 
-tipo.innerHTML = `
-<option value="vistoria_complementar">Vistoria Complementar</option>
+tipo.innerHTML=`
+
+<option value="vistoria_complementar">
+Vistoria Complementar
+</option>
+
 `;
 
 }
@@ -169,10 +218,17 @@ let tipo =
 document.getElementById("tipo").value;
 
 document.getElementById("campoCodigo").style.display="none";
+document.getElementById("camposVistoria").style.display="none";
 
 if(tipo=="postagem"){
 
 document.getElementById("campoCodigo").style.display="block";
+
+}
+
+if(tipo=="vistoria_complementar"){
+
+document.getElementById("camposVistoria").style.display="block";
 
 }
 
@@ -228,14 +284,14 @@ const semana=[
 "sábado"
 ];
 
-return data.getDate()
-+ " de "
-+ meses[data.getMonth()]
-+ " de "
-+ data.getFullYear()
-+ " ("
-+ semana[data.getDay()]
-+ ")";
+return data.getDate() +
+" de " +
+meses[data.getMonth()] +
+" de " +
+data.getFullYear() +
+" (" +
+semana[data.getDay()] +
+")";
 
 }
 
@@ -253,7 +309,7 @@ document.getElementById("tipo").value;
 let codigo =
 document.getElementById("codigo").value;
 
-let parecer = "";
+let parecer="";
 
 if(tipo=="postagem"){
 
@@ -287,19 +343,12 @@ relacao +
 ", entrou em contato informando que o CNPJ está inapto para faturamento.\n\n" +
 
 "ALFA SEGURADORA S.A.\n" +
-
 "CNPJ: 02.713.529/0001-88\n" +
-
 "Inscrição Municipal: 2.735.513-6\n" +
-
 "Inscrição Estadual: 115.550.340.117\n" +
-
 "Av. Paulista, 2150\n" +
-
 "São Paulo/SP\n" +
-
 "CEP: 01310-300\n" +
-
 "Status: Ativa.";
 
 }
@@ -315,13 +364,77 @@ relacao +
 
 if(tipo=="vistoria_complementar"){
 
-let agora = new Date();
+let cliente =
+document.getElementById("clienteVistoria").value;
+
+let rede =
+document.getElementById("redeVistoria").value;
+
+let veiculo =
+document.getElementById("veiculoVistoria").value;
 
 let diasInicio = 1;
+
+let agora = new Date();
 
 if(agora.getHours() >= 17){
 
 diasInicio = 2;
+
+}
+
+let diasVistoria = 1;
+let diasAnalise = 2;
+
+if(
+cliente=="SEGURADO" &&
+rede=="REFERENCIADA"
+){
+
+diasVistoria = 1;
+diasAnalise = 2;
+
+}
+
+if(
+cliente=="SEGURADO" &&
+rede=="LIVRE ESCOLHA"
+){
+
+diasVistoria = 2;
+diasAnalise = 3;
+
+}
+
+if(
+cliente=="TERCEIRO" &&
+rede=="REFERENCIADA"
+){
+
+diasVistoria = 2;
+diasAnalise = 3;
+
+}
+
+if(
+veiculo=="MOTO" ||
+veiculo=="CAMINHÃO" ||
+veiculo=="ELÉTRICO"
+){
+
+diasVistoria = 2;
+diasAnalise = 3;
+
+}
+
+if(
+cliente=="TERCEIRO" &&
+rede=="LIVRE ESCOLHA" &&
+veiculo=="CARRO"
+){
+
+diasVistoria = 3;
+diasAnalise = 7;
 
 }
 
@@ -332,12 +445,15 @@ diasInicio
 );
 
 let termino =
-new Date(inicio);
+adicionarDiasUteis(
+inicio,
+diasVistoria - 1
+);
 
 let analise =
 adicionarDiasUteis(
 termino,
-2
+diasAnalise
 );
 
 parecer =
@@ -345,21 +461,15 @@ parecer =
 "Entrou em contato solicitando vistoria complementar. Ciente do prazo de vistoria.\n\n" +
 
 "Data de início da vistoria: " +
-
 formatarData(inicio) +
-
 ".\n\n" +
 
 "Data de término da vistoria: " +
-
 formatarData(termino) +
-
 ".\n\n" +
 
 "Data final de análise: " +
-
 formatarData(analise) +
-
 ".";
 
 }
