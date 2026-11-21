@@ -228,6 +228,114 @@ document.getElementById("campoCodigo").style.display="block";
 
 if(tipo=="vistoria_complementar"){
 
+let cliente =
+document.getElementById("clienteVistoria").value;
+
+let rede =
+document.getElementById("redeVistoria").value;
+
+let veiculo =
+document.getElementById("veiculoVistoria").value;
+
+let agora = new Date();
+
+let diasInicio = 1;
+
+if(agora.getHours() >= 17){
+
+diasInicio = 2;
+
+}
+
+let diasVistoria = 1;
+let diasAnalise = 2;
+
+if(
+cliente=="SEGURADO" &&
+rede=="REFERENCIADA"
+){
+
+diasVistoria = 1;
+diasAnalise = 2;
+
+}
+
+else if(
+cliente=="SEGURADO" &&
+rede=="LIVRE ESCOLHA"
+){
+
+diasVistoria = 2;
+diasAnalise = 3;
+
+}
+
+else if(
+cliente=="TERCEIRO" &&
+rede=="REFERENCIADA"
+){
+
+diasVistoria = 2;
+diasAnalise = 3;
+
+}
+
+else if(
+(cliente=="TERCEIRO" && rede=="LIVRE ESCOLHA" && veiculo=="CARRO")
+){
+
+diasVistoria = 3;
+diasAnalise = 7;
+
+}
+
+if(
+veiculo=="MOTO" ||
+veiculo=="CAMINHÃO" ||
+veiculo=="ELÉTRICO"
+){
+
+diasVistoria = 2;
+diasAnalise = 3;
+
+}
+
+let inicio =
+adicionarDiasUteis(
+agora,
+diasInicio
+);
+
+let termino =
+adicionarDiasUteis(
+inicio,
+diasVistoria - 1
+);
+
+let analise =
+adicionarDiasUteis(
+termino,
+diasAnalise
+);
+
+parecer =
+
+"Entrou em contato solicitando vistoria complementar. Ciente do prazo de vistoria.\n\n" +
+
+"Data de início da vistoria: " +
+formatarData(inicio) +
+".\n\n" +
+
+"Data de término da vistoria: " +
+formatarData(termino) +
+".\n\n" +
+
+"Data final de análise: " +
+formatarData(analise) +
+".";
+
+}
+
 document.getElementById("camposVistoria").style.display="block";
 
 }
